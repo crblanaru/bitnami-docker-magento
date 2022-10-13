@@ -7,6 +7,8 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_USER=bn_magento
       - MARIADB_DATABASE=bitnami_magento
+    volumes:
+      - 'mariadb_data:/bitnami/mariadb'
     ports:
       - '3306:3306'
   magento:
@@ -24,10 +26,18 @@ services:
       - ELASTICSEARCH_PORT_NUMBER=9200
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
-    ports:
-      - '9200:9200'
+    volumes:
+      - 'magento_data:/bitnami/magento'
     depends_on:
       - mariadb
       - elasticsearch
   elasticsearch:
     image: docker.io/bitnami/elasticsearch:7
+    volumes:
+      - 'elasticsearch_data:/bitnami/elasticsearch/data'
+    ports:
+      - '9200:9200'
+volumes:
+  mariadb_data:
+  magento_data:
+  elasticsearch_data:
